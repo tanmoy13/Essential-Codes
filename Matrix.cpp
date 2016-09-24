@@ -1,5 +1,9 @@
 
 /*----------------------Matrix-----------------------*/
+
+// int MOD=
+// ll MOD=
+
 struct matrix
 {
     ll mat[2][2];
@@ -29,6 +33,7 @@ struct matrix
                 for (int k = 0; k <col;  k++)
                 {
                     sum += ((mat[i][k]%MOD) * (p.mat[k][j]%MOD))%MOD;
+                    sum%=MOD;
                 }
                 temp.mat[i][j] = sum;
             }
