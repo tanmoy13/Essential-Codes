@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+
 #define pii              pair <int,int>
 #define pll              pair <long long,long long>
 #define sc               scanf
@@ -62,8 +63,8 @@ using namespace std;
 #define mx 100005
 
 char str[mx];
-int suffix_array[mx],temp_SA[mx];
-int suffix_rank[mx],temp_RA[mx];
+int SA[mx],temp_SA[mx]; //SA[] = Suffix Array
+int RA[mx],temp_RA[mx]; //RA[] = Rank for Suffix
 int cnt_sort[mx];
 int n;
 
@@ -73,7 +74,7 @@ void counting_sort(int k)
     ms(cnt_sort,0);
     for(int i=0;i<n;i++)
     {
-        int a=i+k<n?suffix_rank[i+k]:0;
+        int a=i+k<n?RA[i+k]:0;
         cnt_sort[a]++;
     }
     for(int i=0,sum=0;i<maxi;i++)
@@ -85,13 +86,13 @@ void counting_sort(int k)
 
     for(int i=0;i<n;i++)
     {
-        int a=suffix_array[i]+k<n?suffix_rank[suffix_array[i]+k]:0;
-        temp_SA[cnt_sort[a]]=suffix_array[i];
+        int a=SA[i]+k<n?RA[SA[i]+k]:0;
+        temp_SA[cnt_sort[a]]=SA[i];
         cnt_sort[a]++;
     }
 
     for(int i=0;i<n;i++)
-        suffix_array[i]=temp_SA[i];
+        SA[i]=temp_SA[i];
 
 }
 
@@ -99,27 +100,27 @@ void build_Suffix_Array()
 {
     for(int i=0;i<n;i++)
     {
-        suffix_rank[i]=str[i];
-        suffix_array[i]=i;
+        RA[i]=str[i];
+        SA[i]=i;
     }
 
     for(int k=1;k<n;k*=2)
     {
         counting_sort(k);
         counting_sort(0);
-        temp_RA[suffix_array[0]]=0;
+        temp_RA[SA[0]]=0;
         int r=0;
         for(int i=1;i<n;i++)
         {
-            int a=suffix_array[i];
-            if(suffix_rank[suffix_array[i]]==suffix_rank[suffix_array[i-1]] && suffix_rank[suffix_array[i]+k]==suffix_rank[suffix_array[i-1]+k])
-                temp_RA[suffix_array[i]]=r;
+            int a=SA[i];
+            if(RA[SA[i]]==RA[SA[i-1]] && RA[SA[i]+k]==RA[SA[i-1]+k])
+                temp_RA[SA[i]]=r;
             else
-                temp_RA[suffix_array[i]]=++r;
+                temp_RA[SA[i]]=++r;
         }
         for(int i=0;i<n;i++)
-            suffix_rank[i]=temp_RA[i];
-        if(suffix_rank[suffix_array[n-1]]==n-1)
+            RA[i]=temp_RA[i];
+        if(RA[SA[n-1]]==n-1)
             break;
     }
 }
@@ -134,7 +135,7 @@ int main()
     n=strlen(str);
     build_Suffix_Array();
     for(int i=0;i<n;i++)
-        pf("%d\n",suffix_array[i]);
+        pf("%d\n",SA[i]);
 
 
     return 0;
